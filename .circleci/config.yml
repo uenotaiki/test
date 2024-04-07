@@ -12,6 +12,15 @@ jobs:
           name: "Say hello"
           command: "echo Hello, Taiki!"
 
+  say-hi:
+    docker:
+      - image: cimg/base:current
+    steps:
+      - checkout
+      - run:
+          name: "Say hi"
+          command: "echo Hi!"
+
   say-japan:
     docker:
       - image: cimg/base:current
@@ -20,12 +29,12 @@ jobs:
       - run:
           name: "Say hello"
           command: "echo Hello, Japan!"
-
 # Orchestrate jobs using workflows
 workflows:
   say-hello-workflow:
     jobs:
       - say-hello
+      - say-hi
       - say-japan:
           requires:
             - say-hello
