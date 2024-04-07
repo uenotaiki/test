@@ -35,7 +35,7 @@ jobs:
       - checkout
       - run:
           name: "first job"
-          command: "mkdir -p workspace && touch workspace/file.txt"
+          command: "mkdir -p ~/tmp/workspace && touch ~/tmp/workspace/file.txt"
       - persist_to_workspace:
           root: ~/tmp
           paths:
@@ -44,9 +44,8 @@ jobs:
     docker:
       - image: cimg/base:current
     steps:
-      - checkout
       - attach_workspace:
-          at: ~/tmp
+          at: ~/tmp/workspace
       - run:
           name: "second job"
           command: "ls ~/tmp/workspace/file.txt"
