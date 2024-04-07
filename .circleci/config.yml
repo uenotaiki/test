@@ -20,7 +20,6 @@ jobs:
       - run:
           name: "Say hi"
           command: "echo Hi!"
-
   say-japan:
     docker:
       - image: cimg/base:current
@@ -29,6 +28,22 @@ jobs:
       - run:
           name: "Say hello"
           command: "echo Hello, Japan!"
+  first-job:
+    docker:
+      - image: cimg/base:current
+    steps:
+      - checkout
+      - run:
+          name: "first job"
+          command: "mkdir -p workspace && touch workspace/file.txt"
+  second-job:
+    docker:
+      - image: cimg/base:current
+    steps:
+      - checkout
+      - run:
+          name: "second job"
+          command: "ls /tmp/workspace/file.txt"
 # Orchestrate jobs using workflows
 workflows:
   say-hello-workflow:
