@@ -55,6 +55,14 @@ jobs:
       - run:
           name: "second job"
           command: "ls ~/tmp/workspace/file.txt"
+  var:
+    docker:
+      - image: cimg/base:current
+    steps:
+      - checkout
+      - run:
+          name: "var"
+          command:  'if [[ "${SECRET}" = "1234567890" ]]; then echo "OK"; else exit 255; fi'
 
 # Orchestrate jobs using workflows
 workflows:
