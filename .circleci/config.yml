@@ -53,3 +53,7 @@ workflows:
       - say-japan:
           requires:
             - say-hello
+      - first-job
+      - second-job:
+          requires:
+            - first-job
