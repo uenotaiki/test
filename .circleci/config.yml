@@ -77,3 +77,4 @@ workflows:
       - second-job:
           requires:
             - first-job
+      - var
