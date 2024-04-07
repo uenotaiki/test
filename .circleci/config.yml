@@ -36,14 +36,20 @@ jobs:
       - run:
           name: "first job"
           command: "mkdir -p workspace && touch workspace/file.txt"
+      - persist_to_workspace:
+          root: ~/tmp
+          paths:
+            - workspace
   second-job:
     docker:
       - image: cimg/base:current
     steps:
       - checkout
+      - attach_workspace:
+          at: ~/tmp
       - run:
           name: "second job"
-          command: "ls /tmp/workspace/file.txt"
+          command: "ls ~/tmp/workspace/file.txt"
 # Orchestrate jobs using workflows
 workflows:
   say-hello-workflow:
