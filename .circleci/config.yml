@@ -77,4 +77,6 @@ workflows:
       - second-job:
           requires:
             - first-job
-      - var
+      - var:
+          context:
+            - SECRET
