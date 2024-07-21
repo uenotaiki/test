@@ -1,11 +1,82 @@
+# Use the latest 2.1 version of CircleCI pipeline process engine.
 version: 2.1
 
+# Define a job to be invoked later in a workflow.
 jobs:
-  build:
+  say-hello:
     docker:
-      - image: circleci/python:3.8
-
+      - image: cimg/base:current
     steps:
+      - checkout
       - run:
-          name: Say Hello
-          command: echo "Hello, ${NAME}!"
+          name: "Say hello"
+          command: "echo Hello, Taiki!"
+
+  say-hi:
+    docker:
+      - image: cimg/base:current
+    steps:
+      - checkout
+      - run:
+          name: "Say hi"
+          command: "echo Hi!"
+
+  say-japan:
+    docker:
+      - image: cimg/base:current
+    steps:
+      - checkout
+      - run:
+          name: "Say hello"
+          command: "echo Hello, Japan!"
+
+  first-job:
+    docker:
+      - image: cimg/base:current
+    steps:
+      - checkout
+      - run:
+          name: "first job setup"
+          command: "mkdir -p ~/tmp/workspace"
+      - run:
+          name: "create file"
+          command: "touch ~/tmp/workspace/file.txt"
+      - persist_to_workspace:
+          root: ~/tmp
+          paths:
+            - workspace
+
+  second-job:
+    docker:
+      - image: cimg/base:current
+    steps:
+      - attach_workspace:
+          at: ~/tmp
+      - run:
+          name: "second job"
+          command: "ls ~/tmp/workspace/file.txt"
+  var:
+    docker:
+      - image: cimg/base:current
+    steps:
+      - checkout
+      - run:
+          name: "var"
+          command:  'if [[ "${SECRET}" = "1234567890" ]]; then echo "OK"; else exit 255; fi'
+
+# Orchestrate jobs using workflows
+workflows:
+  say-hello-workflow:
+    jobs:
+      - say-hello
+      - say-hi
+      - say-japan:
+          requires:
+            - say-hello
+      - first-job
+      - second-job:
+          requires:
+            - first-job
+      - var:
+          context:
+            - SECRET
